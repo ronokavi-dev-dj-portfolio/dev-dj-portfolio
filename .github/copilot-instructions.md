@@ -23,6 +23,13 @@ This is a personal portfolio for a software developer with 17 years of professio
 - Keep secrets out of source control and use `.env.example` for documented configuration.
 - Run the narrowest relevant validation after each change, then verify the production build.
 
+## Branch Protection Rules
+- The `main` branch is protected and may only be updated via a pull request.
+- Never push directly to `main` under any circumstance.
+- Always create or use a feature branch for changes, then open a pull request for review and merge.
+- Do not bypass GitHub branch protection, disable required checks, or merge without the required review flow.
+- If a change is urgent, it still must follow the PR workflow and approval process.
+
 ## Quality Bar
 - Check desktop and mobile layouts.
 - Avoid layout shifts, inaccessible color contrast, and text that overflows its container.
