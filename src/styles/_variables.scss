@@ -1,0 +1,27 @@
+// Shared design tokens. Components should reference these, never hardcode
+// a color, spacing, or breakpoint value.
+:root {
+  --bg: #0a0a0d;
+  --bg-alt: #141417;
+  --text: #f2f2f5;
+  --muted: #9a9aa5;
+
+  --accent: #ff5b6e;
+  --accent-2: #8b6ff0;
+  --accent-3: #ff9a3c;
+  --accent-4: #2fb6a8;
+  --accent-5: #4a8bff;
+
+  --line: #262629;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+}
+
+$bp-tablet: 700px;
+$bp-desktop: 1024px;

@@ -1,0 +1,92 @@
+@use '../../styles/mixins';
+
+.section { @include mixins.container; }
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.item {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: start;
+  background: #101013;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover, &:focus-visible {
+    transform: scale(1.03);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  }
+
+  &:nth-child(odd) { --glow: rgba(255, 91, 110, 0.5); }
+  &:nth-child(even) { --glow: rgba(74, 139, 255, 0.5); }
+}
+
+.itemBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 75% 25%, var(--glow) 0%, transparent 60%),
+    linear-gradient(200deg, #0c0c0f 20%, #17171b 100%);
+}
+
+.itemVignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.65);
+}
+
+.label { position: relative; z-index: 2; }
+
+.hoverIcon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 2;
+
+  .item:hover &, .item:focus-visible & { opacity: 1; }
+
+  span {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(10, 10, 13, 0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  svg { width: 22px; height: 22px; fill: #fff; }
+}

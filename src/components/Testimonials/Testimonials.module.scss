@@ -1,0 +1,41 @@
+@use '../../styles/mixins';
+
+.section { background: var(--bg-alt); }
+.inner { @include mixins.container; }
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+  &:hover { transform: translateY(-4px); }
+  &:nth-child(2) { border-top-color: var(--accent-2); }
+  &:nth-child(3) { border-top-color: var(--accent-3); }
+}
+
+.quote { margin: 0 0 0.75rem; color: var(--text); }
+.who { margin: 0; color: var(--muted); font-size: 0.85rem; }

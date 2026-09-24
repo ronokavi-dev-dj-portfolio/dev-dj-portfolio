@@ -1,0 +1,64 @@
+@use '../../styles/mixins';
+
+.section { @include mixins.container; }
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 480px;
+}
+
+.field { display: grid; gap: 0.3rem; }
+
+input, textarea {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+
+  &:focus { outline: none; border-color: var(--accent-5); }
+  &.invalid { border-color: var(--accent); }
+}
+
+.error {
+  color: var(--accent);
+  font-size: 0.8rem;
+  min-height: 1em;
+}
+
+.submitBtn {
+  display: inline-block;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 0.85rem 1.9rem;
+  border-radius: 999px;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2) 60%, var(--accent-5));
+  box-shadow: 0 8px 28px rgba(255, 91, 110, 0.35);
+  transition: transform 0.2s ease;
+
+  &:hover { transform: translateY(-2px); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+}
+
+.status {
+  font-size: 0.9rem;
+  color: var(--accent-4);
+  min-height: 1.2em;
+}
