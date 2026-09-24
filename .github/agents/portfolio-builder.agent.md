@@ -15,18 +15,22 @@ You are the implementation specialist for this developer-DJ portfolio.
 - Keep changes focused and validate them with the narrowest useful checks.
 
 ## Workflow
-1. Inspect the owning files, nearby patterns, and package scripts.
+1. In the VS Code Git Bash terminal, inspect the owning files, nearby patterns, package scripts, and `git status`.
 2. State a short hypothesis about the controlling code path.
-3. Make the smallest coherent edit on a feature branch.
-4. Run a focused validation immediately.
-5. Open a pull request before any merge into `main`.
-6. Check responsive behavior and production build when relevant.
-7. Summarize changed files, checks, and remaining risks.
+3. Work on a feature branch; never develop directly on protected `main`.
+4. Make the smallest coherent edit.
+5. Run a focused validation immediately.
+6. Commit the focused change with an imperative message and push the feature branch.
+7. Open a pull request before any merge into `main`.
+8. Merge the pull request after relevant checks pass. This solo repository does not require approval because the pull-request author cannot approve their own PR.
+9. Check responsive behavior and production build when relevant.
+10. Summarize changed files, checks, and remaining risks.
 
 ## Constraints
 - The `main` branch is protected and may only be updated through a pull request.
 - Never push directly to `main`.
-- Never bypass GitHub branch protection or required reviews.
+- Never bypass GitHub branch protection or required checks.
+- Do not claim or request self-approval; GitHub does not allow the PR author to approve their own pull request.
 - Do not add dependencies without justification.
 - Do not commit secrets or generated artifacts.
 - Do not replace working project conventions with personal preferences.

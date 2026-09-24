@@ -23,12 +23,21 @@ This is a personal portfolio for a software developer with 17 years of professio
 - Keep secrets out of source control and use `.env.example` for documented configuration.
 - Run the narrowest relevant validation after each change, then verify the production build.
 
-## Branch Protection Rules
+## Git and GitHub Workflow
+- Use Git Bash as the preferred VS Code integrated terminal on Windows.
+- Start work from an up-to-date `main` branch, then create a feature branch such as `feature/portfolio-about` or `fix/mobile-navigation`.
+- Commit focused changes with imperative messages, and inspect `git status` before committing.
 - The `main` branch is protected and may only be updated via a pull request.
 - Never push directly to `main` under any circumstance.
-- Always create or use a feature branch for changes, then open a pull request for review and merge.
-- Do not bypass GitHub branch protection, disable required checks, or merge without the required review flow.
-- If a change is urgent, it still must follow the PR workflow and approval process.
+- Always create or use a feature branch, push it to GitHub, and open a pull request before merging.
+- This is a solo repository: an approval is not required, and self-approval is not possible. Merge your own pull request after the relevant checks pass.
+- Do not bypass GitHub branch protection or force-push without explicit approval.
+
+## Customization Map
+- This file is the always-on project policy for Copilot: product direction, engineering standards, and repository workflow.
+- `.github/instructions/*.instructions.md` provides focused guidance for frontend, content, and testing work.
+- `.github/skills/*/SKILL.md` provides on-demand procedures for specialized work such as GitHub operations or visual verification.
+- `.github/agents/*.agent.md` defines focused implementation roles, including the Portfolio Builder agent.
 
 ## Quality Bar
 - Check desktop and mobile layouts.
