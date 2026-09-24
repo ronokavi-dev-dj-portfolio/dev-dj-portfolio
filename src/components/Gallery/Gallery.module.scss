@@ -1,0 +1,92 @@
+@use '../../styles/mixins';
+
+.section { background: var(--bg-alt); }
+.inner { @include mixins.container; }
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.9rem;
+}
+
+.item {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  background: #101013;
+  border: none;
+  padding: 0;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover, &:focus-visible {
+    transform: scale(1.06);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.itemBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 20%, var(--glow) 0%, transparent 55%),
+    linear-gradient(200deg, #0c0c0f 20%, #17171b 100%);
+}
+
+.itemVignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.itemPhoto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hoverIcon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 2;
+
+  .item:hover &, .item:focus-visible & { opacity: 1; }
+
+  span {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(10, 10, 13, 0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  svg { width: 22px; height: 22px; fill: #fff; }
+}

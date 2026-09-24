@@ -1,0 +1,24 @@
+@use '../../styles/mixins';
+
+.statement {
+  text-align: center;
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-block: 1px solid var(--line);
+}
+
+.text {
+  @include mixins.container;
+  font-size: clamp(1.6rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  max-width: 800px;
+  margin-inline: auto;
+  letter-spacing: -0.01em;
+}
+
+.accentWord {
+  background: linear-gradient(120deg, var(--accent), var(--accent-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

@@ -1,0 +1,28 @@
+@use '../../styles/mixins';
+
+.footer {
+  text-align: center;
+  padding-block: 2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.socials a {
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover { border-color: var(--accent-4); color: var(--accent-4); }
+}
