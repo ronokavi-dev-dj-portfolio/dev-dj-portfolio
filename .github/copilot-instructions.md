@@ -5,6 +5,8 @@ This is a personal portfolio for a software developer with 17 years of professio
 
 ## Stack
 - Use Vite, React, TypeScript, semantic HTML, and CSS.
+- Use Sass (SCSS) with co-located CSS Modules for component styling.
+- Keep bilingual English/Hebrew content in typed data or content models, with RTL support.
 - Prefer small, composable components and typed data models.
 - Keep content separate from presentation when practical.
 - Use the existing package scripts and dependencies before adding new ones.

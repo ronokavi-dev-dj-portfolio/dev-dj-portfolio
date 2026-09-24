@@ -11,3 +11,5 @@ applyTo: ["src/**/*.tsx", "src/**/*.ts", "src/**/*.md", "public/**"]
 - Ask for confirmation before adding names, dates, links, venues, clients, genres, or achievements not supplied by the owner.
 - Keep headings concise and calls to action specific.
 - Write descriptive alternative text for meaningful images and empty alt text for decoration.
+- Keep editable gallery, video, genre, and testimonial content in typed files under `src/data/`.
+- Mark missing photos, videos, and testimonials as placeholders rather than presenting invented material as real.
