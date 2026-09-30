@@ -1,5 +1,6 @@
-import { FormEvent, useEffect, useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSiteLanguage } from '../../i18n/useSiteLanguage';
 import styles from './Contact.module.scss';
 
 const RON_EMAIL = 'ronokavi@gmail.com';
@@ -22,11 +23,13 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[\d\s+\-()]{7,}$/;
 
 export function Contact() {
-  const { language, translate } = useLanguage();
+  const { t } = useTranslation('contact');
+  const { language } = useSiteLanguage();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setErrors({});
@@ -38,12 +41,12 @@ export function Contact() {
 
   function validate(): boolean {
     const next: Partial<Record<keyof FormState, string>> = {};
-    const required = translate({ en: 'This field is required', he: 'שדה חובה' });
+    const required = t('validation.required');
 
     if (!form.name.trim()) next.name = required;
     if (!form.reply.trim()) next.reply = required;
     else if (!EMAIL_RE.test(form.reply) && !PHONE_RE.test(form.reply)) {
-      next.reply = translate({ en: 'Enter a valid email or phone number', he: 'הזינו אימייל או טלפון תקין' });
+      next.reply = t('validation.invalidReply');
     }
     if (!form.date.trim()) next.date = required;
     if (!form.type.trim()) next.type = required;
@@ -65,23 +68,18 @@ export function Contact() {
           body: JSON.stringify(form),
         });
         if (!res.ok) throw new Error('Formspree submission failed');
-        setStatus(translate({ en: 'Thanks! Your message has been sent.', he: 'תודה! ההודעה נשלחה.' }));
+        setStatus(t('status.sent'));
         setForm(EMPTY_FORM);
       } else {
         // No Formspree endpoint configured yet — fall back to opening the
         // visitor's email client, addressed to Ron, pre-filled.
-        const subject = encodeURIComponent(`New booking inquiry from ${form.name}`);
-        const body = encodeURIComponent(
-          `Name: ${form.name}\nContact: ${form.reply}\nEvent date: ${form.date}\nEvent type: ${form.type}\n\n${form.message}`
-        );
-        setStatus(translate({ en: 'Thanks! Your message is ready to send.', he: 'תודה! ההודעה מוכנה לשליחה.' }));
+        const subject = encodeURIComponent(t('email.subject', { name: form.name }));
+        const body = encodeURIComponent(t('email.body', form));
+        setStatus(t('status.ready'));
         window.location.href = `mailto:${RON_EMAIL}?subject=${subject}&body=${body}`;
       }
     } catch {
-      setStatus(translate({
-        en: "Something went wrong — please email me directly at ronokavi@gmail.com",
-        he: 'משהו השתבש — אנא שלחו לי מייל ישירות ל-ronokavi@gmail.com',
-      }));
+      setStatus(t('status.error'));
     } finally {
       setSubmitting(false);
     }
@@ -93,40 +91,63 @@ export function Contact() {
     className: errors[key] ? styles.invalid : undefined,
   });
 
+  const openDatePicker = () => {
+    dateInputRef.current?.showPicker?.();
+  };
+
   return (
     <section id="contact" className={styles.section}>
-      <p className={styles.eyebrow}>{translate({ en: 'Have an event coming up?', he: 'יש לך אירוע בקרוב?' })}</p>
-      <h2>{translate({ en: 'Get in touch', he: 'בואו נדבר' })}</h2>
+      <p className={styles.eyebrow}>{t('eyebrow')}</p>
+      <h2>{t('heading')}</h2>
 
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.field}>
-          <input type="text" placeholder={translate({ en: 'Name', he: 'שם' })} {...fieldProps('name')} />
+          <input type="text" placeholder={t('fields.name')} {...fieldProps('name')} />
           <span className={styles.error}>{errors.name}</span>
         </div>
         <div className={styles.field}>
-          <input type="text" placeholder={translate({ en: 'Your email or phone', he: 'האימייל או הטלפון שלך' })} {...fieldProps('reply')} />
+          <input type="text" placeholder={t('fields.reply')} {...fieldProps('reply')} />
           <span className={styles.error}>{errors.reply}</span>
         </div>
-        <div className={styles.field}>
+        <div className={`${styles.field} ${styles.dateField}`}>
           <input
+            ref={dateInputRef}
             type="date"
             lang={language === 'en' ? 'en-GB' : 'he'}
             dir={language === 'he' ? 'rtl' : 'ltr'}
-            aria-label={translate({ en: 'Event date', he: 'תאריך האירוע' })}
+            aria-label={t('fields.date')}
+            onClick={openDatePicker}
+            onKeyDown={(event) => {
+              if (!['Tab', 'Enter', ' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                event.preventDefault();
+              }
+            }}
+            onPaste={(event) => event.preventDefault()}
             {...fieldProps('date')}
+            className={`${styles.dateInput} ${errors.date ? styles.invalid : ''}`}
           />
+          <button
+            type="button"
+            className={styles.datePickerButton}
+            aria-label={t('fields.chooseDate')}
+            onClick={openDatePicker}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7Zm12 17H5V9h14v10ZM5 7V6h14v1H5Z" />
+            </svg>
+          </button>
           <span className={styles.error}>{errors.date}</span>
         </div>
         <div className={styles.field}>
-          <input type="text" placeholder={translate({ en: 'Event type', he: 'סוג האירוע' })} {...fieldProps('type')} />
+          <input type="text" placeholder={t('fields.type')} {...fieldProps('type')} />
           <span className={styles.error}>{errors.type}</span>
         </div>
         <div className={styles.field}>
-          <textarea rows={4} placeholder={translate({ en: 'Tell me about your event', he: 'ספרו לי על האירוע שלכם' })} {...fieldProps('message')} />
+          <textarea rows={4} placeholder={t('fields.message')} {...fieldProps('message')} />
           <span className={styles.error}>{errors.message}</span>
         </div>
         <button type="submit" className={styles.submitBtn} disabled={submitting}>
-          {translate({ en: 'Send', he: 'שליחה' })}
+          {t('actions.send')}
         </button>
         <p className={styles.status}>{status}</p>
       </form>

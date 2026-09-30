@@ -1,8 +1,9 @@
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import styles from './Hero.module.scss';
 
 export function Hero() {
-  const { translate } = useLanguage();
+  const { t } = useTranslation('hero');
+  const { t: commonT } = useTranslation('common');
 
   return (
     <section className={styles.hero}>
@@ -11,17 +12,14 @@ export function Hero() {
       <div className={`${styles.blob} ${styles.blob3}`} />
       <div className={styles.inner}>
         <p className={styles.eyebrow}>
-          {translate({ en: 'Software Developer × DJ', he: 'מפתח תוכנה × תקליטן' })}
+          {t('eyebrow')}
         </p>
-        <h1 className={styles.title}>Ron Okavi</h1>
+        <h1 className={styles.title}>{commonT('brand')}</h1>
         <p className={styles.sub}>
-          {translate({
-            en: "Bringing an engineer's precision and a genuine passion for music to every event — all genres, every crowd, always on point.",
-            he: 'מביא דיוק של מהנדס ותשוקה אמיתית למוזיקה לכל אירוע — כל הסגנונות, כל קהל, תמיד בול פגיעה.',
-          })}
+          {t('subtitle')}
         </p>
         <a className={styles.btn} href="#contact">
-          {translate({ en: 'Book Ron', he: 'הזמינו את רון' })}
+          {t('book')}
         </a>
       </div>
     </section>

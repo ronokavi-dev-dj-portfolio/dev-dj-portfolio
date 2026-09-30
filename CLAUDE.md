@@ -28,16 +28,21 @@ structure.
   card that might sit in different width contexts)
 - Test every component at three widths minimum: ~375px (mobile), ~768px (tablet), ~1440px
   (desktop) before calling a section done
-- Content (testimonials, gallery items, video links) lives in typed data files under
-  `src/data/`, never hardcoded inline in components — this is what lets Ron update content
-  by editing one file and pushing, no code changes needed
+- Structural content records (IDs, media paths, video links, and translation keys) live in
+  typed data files under `src/data/`. All wording lives in matching feature namespace files
+  under `src/i18n/locales/en/` and `src/i18n/locales/he/`, never inline in components
 - Mobile-first responsive design — most visitors will be on a phone checking Ron out before
   a booking, this has to look great small
 
 ## Bilingual content (English + Hebrew)
 - Every user-facing string must exist in both languages — never hardcode English-only text
   or leave a Hebrew field empty "for later"
-- Store text as `{ en, he }` pairs in the typed data files, not as two duplicate components
+- Store text at the same key in matching English and Hebrew feature namespace JSON files.
+  Keep data records language-neutral and point them to typed translation keys
+- Components use react-i18next `useTranslation()` with an explicit namespace. Use `<Trans>`
+  only when translated copy contains component markup
+- `LanguageEffects` is the single owner of document `lang`, `dir`, metadata, and language
+  persistence; use `useSiteLanguage()` for toggle or direction-sensitive component behavior
 - Use CSS logical properties (`margin-inline-start/end`, `padding-inline-*`, `text-align: start`)
   instead of physical `left`/`right` so layout correctly mirrors in RTL without extra
   RTL-specific stylesheets

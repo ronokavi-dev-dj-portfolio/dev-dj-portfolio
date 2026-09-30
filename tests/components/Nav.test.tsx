@@ -1,14 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { LanguageProvider } from '../../src/context/LanguageContext';
 import { Nav } from '../../src/components/Nav/Nav';
+import { LanguageEffects } from '../../src/i18n/LanguageEffects';
 
 function renderNav() {
   return render(
-    <LanguageProvider>
+    <>
+      <LanguageEffects />
       <Nav />
-    </LanguageProvider>,
+    </>,
   );
 }
 
@@ -33,6 +34,11 @@ describe('Nav', () => {
     expect(screen.getByRole('button', { name: 'English' })).toBeInTheDocument();
     expect(document.documentElement).toHaveAttribute('dir', 'rtl');
     expect(document.documentElement).toHaveAttribute('lang', 'he');
+    expect(document.title).toBe("רון עוקבי — די ג'יי");
+    expect(document.querySelector('meta[name="description"]')).toHaveAttribute(
+      'content',
+      "רון עוקבי — מפתח תוכנה ביום ודי ג'יי מתוך תשוקה. הזמינו את רון לחתונות, מסיבות ואירועי חברה.",
+    );
     expect(localStorage.getItem('lang')).toBe('he');
   });
 });

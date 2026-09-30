@@ -1,21 +1,20 @@
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import { genres } from '../../data/genres';
 import styles from './About.module.scss';
 
-const STATS = [
-  { num: '17', en: 'Years coding', he: 'שנות פיתוח' },
-  { num: '2.5', en: 'Years DJing', he: 'שנות תקליטנות' },
-  { num: String(genres.length), en: 'Genres played', he: "ז'אנרים" },
-  { num: '100%', en: 'Passion', he: 'תשוקה' },
-];
-
 export function About() {
-  const { translate } = useLanguage();
+  const { t } = useTranslation('about');
+  const stats = [
+    { id: 'years-coding', value: t('stats.yearsCoding.value'), label: t('stats.yearsCoding.label') },
+    { id: 'years-djing', value: t('stats.yearsDjing.value'), label: t('stats.yearsDjing.label') },
+    { id: 'genres-played', value: String(genres.length), label: t('stats.genresPlayed') },
+    { id: 'passion', value: t('stats.passion.value'), label: t('stats.passion.label') },
+  ];
 
   return (
     <section id="about" className={styles.section}>
-      <p className={styles.eyebrow}>{translate({ en: 'My story', he: 'הסיפור שלי' })}</p>
-      <h2>{translate({ en: 'About', he: 'אודות' })}</h2>
+      <p className={styles.eyebrow}>{t('eyebrow')}</p>
+      <h2>{t('heading')}</h2>
 
       <div className={styles.grid}>
         <svg className={styles.ribbon} viewBox="0 0 200 200" aria-hidden="true">
@@ -30,24 +29,21 @@ export function About() {
         <div className={styles.avatar} />
 
         <p className={styles.bio}>
-          {translate({
-            en: "Hi, I'm Ron. 17 years as a software developer, 2.5 years behind the decks — and it's been a wild, rewarding ride. What started as a passion project turned into something people actually book me for. At the end of the day, I do this for the joy, the love, and the pure passion of watching a crowd come alive, wherever the party is — a hall, a backyard, a rooftop, or a pool party. I work closely with everyone who books me to tailor the night exactly to their event, at prices that stay fair and accessible. I bring the same care I put into code into every set: reading the room, staying organized, and making sure the tech never gets in the way of the night.",
-            he: 'היי, אני רון. 17 שנה כמפתח תוכנה, 2.5 שנים מאחורי הפטיפונים — וזו הייתה חוויה מטורפת ומספקת. מה שהתחיל כתחביב הפך למשהו שאנשים באמת מזמינים אותי בשבילו. בסופו של דבר אני עושה את זה מתוך שמחה, אהבה ותשוקה אמיתית — לראות קהל שלם קם לחיים, לא משנה איפה המסיבה — אולם, חצר, גג, או מסיבת בריכה. אני עובד צמוד עם כל מי שמזמין אותי כדי להתאים את הערב בדיוק לאירוע שלו, במחירים הוגנים ונוחים. אני מביא לכל סט את אותה תשומת הלב שאני מביא לקוד: קריאת הקהל, ארגון, ודאגה שהטכנולוגיה לעולם לא תפריע לערב.',
-          })}
+          {t('bio')}
         </p>
       </div>
 
       <div className={styles.genres}>
         {genres.map((genre) => (
-          <span key={genre.en} className={styles.genrePill}>{translate(genre)}</span>
+          <span key={genre.id} className={styles.genrePill}>{t(genre.labelKey)}</span>
         ))}
       </div>
 
       <div className={styles.stats}>
-        {STATS.map((stat) => (
-          <div key={stat.en}>
-            <div className={styles.statNum}>{stat.num}</div>
-            <div className={styles.statLabel}>{translate({ en: stat.en, he: stat.he })}</div>
+        {stats.map((stat) => (
+          <div key={stat.id}>
+            <div className={styles.statNum}>{stat.value}</div>
+            <div className={styles.statLabel}>{stat.label}</div>
           </div>
         ))}
       </div>

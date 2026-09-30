@@ -1,34 +1,37 @@
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
+import { useSiteLanguage } from '../../i18n/useSiteLanguage';
 import styles from './Nav.module.scss';
 
 const NAV_LINKS = [
-  { href: '#about', en: 'About', he: 'אודות' },
-  { href: '#gallery', en: 'Gallery', he: 'גלריה' },
-  { href: '#videos', en: 'Videos', he: 'וידאו' },
-  { href: '#testimonials', en: 'Reviews', he: 'המלצות' },
-  { href: '#contact', en: 'Contact', he: 'צור קשר' },
-];
+  { href: '#about', labelKey: 'links.about' },
+  { href: '#gallery', labelKey: 'links.gallery' },
+  { href: '#videos', labelKey: 'links.videos' },
+  { href: '#testimonials', labelKey: 'links.testimonials' },
+  { href: '#contact', labelKey: 'links.contact' },
+] as const;
 
 export function Nav() {
-  const { language, toggleLanguage, translate } = useLanguage();
+  const { t } = useTranslation('navigation');
+  const { t: commonT } = useTranslation('common');
+  const { language, toggleLanguage } = useSiteLanguage();
 
   return (
     <nav className={styles.nav}>
       <div className={styles.inner}>
-        <div className={styles.logo}>RON OKAVI</div>
+        <div className={styles.logo}>{commonT('brandUppercase')}</div>
         <ul className={styles.links}>
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <a href={link.href}>{translate({ en: link.en, he: link.he })}</a>
+              <a href={link.href}>{t(link.labelKey)}</a>
             </li>
           ))}
         </ul>
         <div className={styles.right}>
           <button type="button" className={styles.langToggle} onClick={toggleLanguage}>
-            {language === 'he' ? 'English' : 'עברית'}
+            {language === 'he' ? commonT('languages.english') : commonT('languages.hebrew')}
           </button>
           <a className={styles.cta} href="#contact">
-            {translate({ en: 'Book Ron', he: 'הזמינו את רון' })}
+            {t('book')}
           </a>
         </div>
       </div>

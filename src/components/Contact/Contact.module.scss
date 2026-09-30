@@ -35,6 +35,87 @@ input, textarea {
   &.invalid { border-color: var(--accent); }
 }
 
+input[type='date'] {
+  cursor: pointer;
+  text-align: start;
+
+  &::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  &::-webkit-datetime-edit {
+    direction: inherit;
+    text-align: start;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    margin-inline-start: 0.35rem;
+  }
+}
+
+.dateField {
+  position: relative;
+}
+
+.dateInput {
+  padding-inline-end: 3.25rem;
+}
+
+.datePickerButton {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0.9rem;
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  place-items: center;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: currentColor;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--text);
+  }
+}
+
+:global(html[dir='rtl']) .dateInput {
+  padding-inline-start: 1rem;
+  padding-inline-end: 3.25rem;
+}
+
+:global(html[dir='ltr']) input[type='date'] {
+  direction: ltr;
+  text-align: left;
+
+  &::-webkit-datetime-edit,
+  &::-webkit-datetime-edit-fields-wrapper {
+    direction: ltr;
+    text-align: left;
+  }
+}
+
+:global(html[dir='rtl']) input[type='date'] {
+  direction: rtl;
+  text-align: right;
+
+  &::-webkit-datetime-edit,
+  &::-webkit-datetime-edit-fields-wrapper {
+    direction: rtl;
+    text-align: right;
+  }
+}
+
 .error {
   color: var(--accent);
   font-size: 0.8rem;

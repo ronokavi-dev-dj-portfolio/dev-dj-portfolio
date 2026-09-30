@@ -1,0 +1,23 @@
+{
+  "eyebrow": "My story",
+  "heading": "About",
+  "bio": "Hi, I'm Ron. 17 years as a software developer, 2.5 years behind the decks — and it's been a wild, rewarding ride. What started as a passion project turned into something people actually book me for. At the end of the day, I do this for the joy, the love, and the pure passion of watching a crowd come alive, wherever the party is — a hall, a backyard, a rooftop, or a pool party. I work closely with everyone who books me to tailor the night exactly to their event, at prices that stay fair and accessible. I bring the same care I put into code into every set: reading the room, staying organized, and making sure the tech never gets in the way of the night.",
+  "genres": {
+    "eighties": "80s",
+    "nineties": "90s",
+    "rock": "Rock",
+    "israeli": "Israeli",
+    "dance": "Dance",
+    "trance": "Trance",
+    "techno": "Techno",
+    "afro": "Afro",
+    "hipHop": "Hip Hop",
+    "mainstream": "Mainstream"
+  },
+  "stats": {
+    "yearsCoding": { "value": "17", "label": "Years coding" },
+    "yearsDjing": { "value": "2.5", "label": "Years DJing" },
+    "genresPlayed": "Genres played",
+    "passion": { "value": "100%", "label": "Passion" }
+  }
+}

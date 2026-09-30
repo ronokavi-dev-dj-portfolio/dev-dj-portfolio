@@ -16,11 +16,14 @@ argument-hint: 'Describe the frontend feature or defect.'
 8. Verify keyboard behavior, responsive layout, loading states, reduced motion, and both LTR/RTL directions where relevant.
 9. Confirm client-side interactions update state without unnecessary full-page navigation or refresh.
 10. Run a focused check, then `npm run build` or the repository's equivalent.
+11. Put user-facing copy in matching files under `src/i18n/locales/en/` and `src/i18n/locales/he/`; components use `useTranslation()` with an explicit feature namespace.
 
 ## Standards
 - Prefer typed props and explicit data models.
 - Prefer `type` aliases for object shapes, props, state, and data models; use `interface` only when declaration merging or interface extension is specifically useful.
-- Use descriptive names that reveal intent: prefer `translate`, `language`, `videoItem`, and `openItemId` over opaque names such as `t`, `lang`, `v`, or `openIndex`.
+- Use descriptive names that reveal intent: prefer `language`, `videoItem`, and `openItemId` over opaque names. The conventional react-i18next `t` binding is the explicit exception.
+- Keep `src/data/` language-neutral with IDs, media metadata, URLs, and typed translation keys. Never reintroduce `{ en, he }`, `titleEn`, or similar parallel language fields.
+- Keep translated alt text, aria-labels, metadata, validation, and generated messages in locale resources, not inline in JSX or event handlers.
 - Prefer UUID v4 identifiers for dynamic or data-backed records and use those IDs for React keys and selected-item state; do not use array indexes as identity.
 - Use semantic HTML before adding ARIA.
 - Avoid unnecessary dependencies and speculative abstractions.

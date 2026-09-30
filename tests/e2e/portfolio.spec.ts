@@ -24,6 +24,11 @@ test.describe('portfolio experience', () => {
 
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.locator('html')).toHaveAttribute('lang', 'he');
+    await expect(page).toHaveTitle("רון עוקבי — די ג'יי");
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      "רון עוקבי — מפתח תוכנה ביום ודי ג'יי מתוך תשוקה. הזמינו את רון לחתונות, מסיבות ואירועי חברה.",
+    );
     await expect(page.getByRole('link', { name: 'הזמינו את רון' }).first()).toBeVisible();
     await expect(page.getByLabel('תאריך האירוע')).toHaveAttribute('lang', 'he');
     await expect(page.getByLabel('תאריך האירוע')).toHaveAttribute('dir', 'rtl');
@@ -35,6 +40,7 @@ test.describe('portfolio experience', () => {
 
     await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page).toHaveTitle('Ron Okavi — DJ');
     await expect(page).toHaveURL(initialUrl);
   });
 

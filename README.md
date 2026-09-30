@@ -8,7 +8,7 @@ static hosting on GitHub Pages.
 
 - React and TypeScript with Vite
 - Sass (SCSS) and CSS Modules
-- Typed bilingual content in `src/data/`
+- Typed structural content in `src/data/` and react-i18next locale resources in `src/i18n/`
 - GitHub Actions deployment to GitHub Pages
 - No backend, database, or paid hosting requirement
 
@@ -17,8 +17,8 @@ static hosting on GitHub Pages.
 ```text
 src/
 	components/       # Hero, navigation, about, gallery, videos, contact, and footer
-	context/           # Language state, persistence, and RTL direction
-	data/              # Typed gallery, video, genre, and testimonial content
+	data/              # Typed IDs, media metadata, URLs, and translation keys
+	i18n/              # Initialization, document effects, and en/he feature namespaces
 	styles/            # Shared Sass variables, mixins, and global styles
 public/images/       # Optimized gallery images when real photos are available
 .github/             # Copilot instructions, skills, agents, and deployment workflow
@@ -44,11 +44,12 @@ The build produces `dist/`, which is ignored by Git.
 
 ## Content
 
-Editable gallery, video, genre, and testimonial content lives in typed files under
-`src/data/`. Real photos belong in `public/images/` and should be resized and compressed
-before committing. The current gallery, videos, and testimonials contain clearly marked
-placeholders until Ron supplies verified material. See [CONTENT-CHECKLIST.md](CONTENT-CHECKLIST.md)
-for the remaining content to gather.
+Editable gallery, video, genre, and testimonial records live in typed files under
+`src/data/`; their English and Hebrew wording lives at matching keys under
+`src/i18n/locales/en/` and `src/i18n/locales/he/`. Real photos belong in `public/images/`
+and should be resized and compressed before committing. The current gallery, videos, and
+testimonials contain clearly marked placeholders until Ron supplies verified material. See
+[CONTENT-CHECKLIST.md](CONTENT-CHECKLIST.md) for the remaining content to gather.
 
 ## Contact Form
 
