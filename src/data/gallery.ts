@@ -4,8 +4,7 @@ export type GalleryItem = {
   id: string;
   // Real image path once photos are added, e.g. "/images/gig-2026-06-wedding-01.webp"
   src: string | null;
-  altEn: string;
-  altHe: string;
+  altKey: 'items.placeholder.alt';
   glow: string; // accent color used for the placeholder look until a real photo exists
 };
 
@@ -20,7 +19,6 @@ const glowCycle = [
 export const gallery: GalleryItem[] = glowCycle.map((glow) => ({
   id: uuidv4(),
   src: null,
-  altEn: 'Photo from a Ron Okavi event',
-  altHe: 'תמונה מאירוע של רון עוקבי',
+  altKey: 'items.placeholder.alt',
   glow,
 }));

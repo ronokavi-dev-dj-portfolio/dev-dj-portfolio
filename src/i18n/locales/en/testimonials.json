@@ -1,0 +1,18 @@
+{
+  "eyebrow": "Don't take my word for it",
+  "heading": "What people say",
+  "items": {
+    "placeholder1": {
+      "quote": "\"Ron read the room perfectly all night — everyone was on the floor.\"",
+      "who": "Dana K. — Wedding, June 2026"
+    },
+    "placeholder2": {
+      "quote": "\"Professional, on time, and the sound quality was flawless.\"",
+      "who": "Company XYZ — Corporate Event"
+    },
+    "placeholder3": {
+      "quote": "\"Best party we've thrown. Booking him again.\"",
+      "who": "Tom S. — Birthday"
+    }
+  }
+}

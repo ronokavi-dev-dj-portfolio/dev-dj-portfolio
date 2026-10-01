@@ -2,14 +2,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { Gallery } from '../../src/components/Gallery/Gallery';
-import { LanguageProvider } from '../../src/context/LanguageContext';
 
 function renderGallery() {
-  return render(
-    <LanguageProvider>
-      <Gallery />
-    </LanguageProvider>,
-  );
+  return render(<Gallery />);
 }
 
 describe('Gallery and Lightbox', () => {

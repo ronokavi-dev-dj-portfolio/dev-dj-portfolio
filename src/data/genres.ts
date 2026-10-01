@@ -1,14 +1,13 @@
-import type { Bilingual } from '../context/LanguageContext';
-
-export const genres: Bilingual[] = [
-  { en: '80s', he: 'שנות ה-80' },
-  { en: '90s', he: 'שנות ה-90' },
-  { en: 'Rock', he: 'רוק' },
-  { en: 'Israeli', he: 'ישראלי' },
-  { en: 'Dance', he: 'דאנס' },
-  { en: 'Trance', he: 'טראנס' },
-  { en: 'Techno', he: 'טכנו' },
-  { en: 'Afro', he: 'אפרו' },
-  { en: 'Hip Hop', he: 'היפ הופ' },
-  { en: 'Mainstream', he: 'מיינסטרים' },
-];
+export const genres = [
+  { id: 'eighties', labelKey: 'genres.eighties' },
+  { id: 'nineties', labelKey: 'genres.nineties' },
+  { id: 'rock', labelKey: 'genres.rock' },
+  { id: 'israeli', labelKey: 'genres.israeli' },
+  { id: 'dance', labelKey: 'genres.dance' },
+  { id: 'afro', labelKey: 'genres.afro' },
+  { id: 'house', labelKey: 'genres.house' },
+  { id: 'electronic', labelKey: 'genres.electronic' },
+  { id: 'techno', labelKey: 'genres.techno' },
+  { id: 'trance', labelKey: 'genres.trance' },
+  { id: 'mainstream', labelKey: 'genres.mainstream' },
+] as const;

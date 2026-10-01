@@ -2,15 +2,16 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { Contact } from '../../src/components/Contact/Contact';
-import { LanguageProvider } from '../../src/context/LanguageContext';
 import { Nav } from '../../src/components/Nav/Nav';
+import { LanguageEffects } from '../../src/i18n/LanguageEffects';
 
 function renderContact() {
   return render(
-    <LanguageProvider>
+    <>
+      <LanguageEffects />
       <Nav />
       <Contact />
-    </LanguageProvider>,
+    </>,
   );
 }
 

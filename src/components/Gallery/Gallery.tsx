@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import { gallery } from '../../data/gallery';
 import { Lightbox } from '../Lightbox/Lightbox';
 import styles from './Gallery.module.scss';
 
 export function Gallery() {
-  const { translate } = useLanguage();
+  const { t } = useTranslation('gallery');
   const [openItemId, setOpenItemId] = useState<string | null>(null);
   const openItem = gallery.find((galleryItem) => galleryItem.id === openItemId) ?? null;
 
   return (
     <section id="gallery" className={styles.section}>
       <div className={styles.inner}>
-        <p className={styles.eyebrow}>{translate({ en: 'The moments', he: 'הרגעים' })}</p>
-        <h2>{translate({ en: 'Gallery', he: 'גלריה' })}</h2>
+        <p className={styles.eyebrow}>{t('eyebrow')}</p>
+        <h2>{t('heading')}</h2>
 
         <div className={styles.grid}>
           {gallery.map((galleryItem) => (
@@ -21,11 +21,11 @@ export function Gallery() {
               key={galleryItem.id}
               type="button"
               className={styles.item}
-              aria-label={translate({ en: galleryItem.altEn, he: galleryItem.altHe })}
+              aria-label={t(galleryItem.altKey)}
               onClick={() => setOpenItemId(galleryItem.id)}
             >
               {galleryItem.src ? (
-                <img className={styles.itemPhoto} src={galleryItem.src} alt={translate({ en: galleryItem.altEn, he: galleryItem.altHe })} loading="lazy" />
+                <img className={styles.itemPhoto} src={galleryItem.src} alt={t(galleryItem.altKey)} loading="lazy" />
               ) : (
                 <>
                   <div className={styles.itemBg} style={{ ['--glow' as string]: galleryItem.glow }} />
@@ -44,12 +44,12 @@ export function Gallery() {
 
       {openItem && (
         <Lightbox
-          eyebrow={translate({ en: 'Visual archive', he: 'ארכיון ויזואלי' })}
-          title={translate({ en: openItem.altEn, he: openItem.altHe })}
+          eyebrow={t('visualArchive')}
+          title={t(openItem.altKey)}
           onClose={() => setOpenItemId(null)}
         >
           {openItem.src ? (
-            <img src={openItem.src} alt={translate({ en: openItem.altEn, he: openItem.altHe })} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={openItem.src} alt={t(openItem.altKey)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <div style={{
               position: 'absolute', inset: 0,

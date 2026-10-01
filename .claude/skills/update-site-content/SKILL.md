@@ -5,18 +5,19 @@ description: Use this skill whenever Ron wants to add or update content on his D
 
 # Update Site Content
 
-Ron's site is fully static: all editable content lives in typed data files under `src/data/`,
-and images live under `public/images/`. There is no CMS or admin panel — every content change
-is a small, safe code change that gets committed and pushed, which triggers GitHub Actions to
-redeploy automatically. This skill is the repeatable, safe path for making that change.
+Ron's site is fully static: structural records live in typed data files under `src/data/`,
+all wording lives in paired react-i18next resources under `src/i18n/locales/en/` and
+`src/i18n/locales/he/`, and images live under `public/images/`. There is no CMS or admin
+panel — every content change is a small, safe code change that gets committed and pushed,
+which triggers GitHub Actions to redeploy automatically.
 
 ## Step 1 — Identify what's being added
 Ask (if not already clear from the request):
-- Gallery photo(s)? → goes to `src/data/gallery.ts` + `public/images/`
-- Testimonial? → goes to `src/data/testimonials.ts`
-- Video link? → goes to `src/data/videos.ts`
-- Bio/about text or genre list? → lives directly in the `About`/`Services` component — edit
-  the text content in place there
+- Gallery photo(s)? → `src/data/gallery.ts`, both `gallery.json` locale files, and `public/images/`
+- Testimonial? → `src/data/testimonials.ts` and both `testimonials.json` locale files
+- Video link? → `src/data/videos.ts` and both `videos.json` locale files
+- Bio/about text? → the matching key in both `about.json` locale files
+- Genre list? → `src/data/genres.ts` plus matching keys in both `about.json` locale files
 
 ## Step 2 — Optimize images (gallery photos only)
 Never commit a raw phone photo. Before adding to `public/images/`:
@@ -25,33 +26,35 @@ Never commit a raw phone photo. Before adding to `public/images/`:
 - If ImageMagick is available: `magick input.jpg -resize 1600x1600\> -quality 82 output.webp`
 - Use a clear, consistent filename: `gig-2026-06-wedding-01.webp` (event context + number)
 
-## Step 3 — Add the typed entry
-Match the existing shape in the data file exactly — don't invent new fields. Example shapes:
+## Step 3 — Add the structural entry and paired copy
+Read the current data file and both matching locale files first. Add a stable translation key
+to the structural record, then add its English and Hebrew wording at that same key. Example
+shapes (the current source remains authoritative):
 
 ```ts
 // src/data/gallery.ts
 { id: "gig-2026-06-wedding-01", src: "/images/gig-2026-06-wedding-01.webp",
-  alt: { en: "...", he: "..." } }
+  altKey: "items.weddingJune2026.alt", glow: "rgba(...)" }
 
 // src/data/testimonials.ts
-{ id: "t-2026-06", name: "Dana K.",
-  event: { en: "Wedding, June 2026", he: "חתונה, יוני 2026" },
-  quote: { en: "...", he: "..." } }
+{ id: "t-2026-06", quoteKey: "items.weddingJune2026.quote",
+  whoKey: "items.weddingJune2026.who" }
 
 // src/data/videos.ts
-{ id: "v-2026-06", title: { en: "...", he: "..." },
-  youtubeUrl: "https://youtube.com/watch?v=..." }
+{ id: "v-2026-06", titleKey: "items.weddingJune2026.title",
+  youtubeId: "..." }
 ```
-The site is bilingual (English + Hebrew) — **every text field is an `{ en, he }` pair, never
-a single string.** If a Hebrew translation isn't provided by Ron, ask for it or flag it
-clearly rather than leaving it blank or duplicating the English text as a placeholder.
-If the actual files differ from this shape (they will evolve during the build), read the
-existing file first and match its real interface — this is illustrative, not authoritative.
+The site is bilingual (English + Hebrew) — **every user-facing key must exist in both matching
+locale namespace files.** Do not put wording in `src/data/` or inline in a component. If a
+Hebrew translation isn't provided by Ron, ask for it or flag it clearly rather than leaving
+it blank or duplicating the English text as a placeholder. If the actual files differ from
+these examples, match their real interfaces.
 
 ## Step 4 — Verify before opening a pull request
 Always run, in order:
-1. `npm run build` — must succeed with no errors
-2. `npm run dev` — spot-check the new content renders correctly, especially at mobile width
+1. `npm test` — translated behavior and resources must remain green
+2. `npm run build` — must succeed with no errors and catches invalid translation keys
+3. `npm run dev` — spot-check both languages, especially at mobile width
    (~375px), since that's most visitors
 
 Never skip this. A broken build merged into `main` takes the live site down until fixed.

@@ -1,4 +1,4 @@
-import { LanguageProvider } from './context/LanguageContext';
+import { LanguageEffects } from './i18n/LanguageEffects';
 import { Nav } from './components/Nav/Nav';
 import { Hero } from './components/Hero/Hero';
 import { Statement } from './components/Statement/Statement';
@@ -12,7 +12,8 @@ import { WhatsappFab } from './components/WhatsappFab/WhatsappFab';
 
 export default function App() {
   return (
-    <LanguageProvider>
+    <>
+      <LanguageEffects />
       <Nav />
       <Hero />
       <Statement />
@@ -23,6 +24,6 @@ export default function App() {
       <Contact />
       <Footer />
       <WhatsappFab />
-    </LanguageProvider>
+    </>
   );
 }
