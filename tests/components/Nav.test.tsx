@@ -21,6 +21,7 @@ describe('Nav', () => {
     expect(screen.getByRole('link', { name: 'About', hidden: true })).toHaveAttribute('href', '#about');
     expect(screen.getByRole('link', { name: 'Book Ron' })).toHaveAttribute('href', '#contact');
     expect(screen.getByRole('button', { name: 'עברית' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'עברית' }).querySelector('svg')).toBeInTheDocument();
   });
 
   it('switches to Hebrew RTL and persists the selected language', async () => {
@@ -32,6 +33,7 @@ describe('Nav', () => {
     expect(screen.getByRole('link', { name: 'אודות', hidden: true })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'הזמינו את רון' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'English' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'English' }).querySelector('svg')).toBeInTheDocument();
     expect(document.documentElement).toHaveAttribute('dir', 'rtl');
     expect(document.documentElement).toHaveAttribute('lang', 'he');
     expect(document.title).toBe("רון עוקבי — די ג'יי");
