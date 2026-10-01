@@ -18,6 +18,21 @@ type FormState = {
   message: string;
 };
 
+const DATE_VALUE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+function dateValueToDate(value: string): Date | null {
+  const match = DATE_VALUE_RE.exec(value);
+  if (!match) return null;
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function dateToValue(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const EMPTY_FORM: FormState = { name: '', reply: '', date: '', type: '', message: '' };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[\d\s+\-()]{7,}$/;
@@ -29,12 +44,25 @@ export function Contact() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const dateInputRef = useRef<HTMLInputElement>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [visibleMonth, setVisibleMonth] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+  const dateFieldRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setErrors({});
     setStatus('');
   }, [language]);
+
+  useEffect(() => {
+    const closeDatePicker = (event: PointerEvent) => {
+      if (!dateFieldRef.current?.contains(event.target as Node)) setIsDatePickerOpen(false);
+    };
+    document.addEventListener('pointerdown', closeDatePicker);
+    return () => document.removeEventListener('pointerdown', closeDatePicker);
+  }, []);
 
   const update = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -91,8 +119,33 @@ export function Contact() {
     className: errors[key] ? styles.invalid : undefined,
   });
 
+  const locale = language === 'en' ? 'en-GB' : 'he-IL';
+  const selectedDate = dateValueToDate(form.date);
+  const monthLabel = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(visibleMonth);
+  const weekDays = Array.from({ length: 7 }, (_, index) =>
+    new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2024, 0, 7 + index)),
+  );
+  const firstDay = visibleMonth.getDay();
+  const daysInMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
+  const calendarDays = Array.from({ length: firstDay + daysInMonth }, (_, index) =>
+    index < firstDay ? null : new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index - firstDay + 1),
+  );
+
   const openDatePicker = () => {
-    dateInputRef.current?.showPicker?.();
+    setVisibleMonth(selectedDate
+      ? new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
+      : new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+    setIsDatePickerOpen(true);
+  };
+
+  const moveMonth = (offset: number) => {
+    setVisibleMonth((month) => new Date(month.getFullYear(), month.getMonth() + offset, 1));
+  };
+
+  const selectDate = (date: Date) => {
+    setForm((current) => ({ ...current, date: dateToValue(date) }));
+    setErrors((current) => ({ ...current, date: undefined }));
+    setIsDatePickerOpen(false);
   };
 
   return (
@@ -109,33 +162,61 @@ export function Contact() {
           <input type="text" placeholder={t('fields.reply')} {...fieldProps('reply')} />
           <span className={styles.error}>{errors.reply}</span>
         </div>
-        <div className={`${styles.field} ${styles.dateField}`}>
+        <div ref={dateFieldRef} className={`${styles.field} ${styles.dateField}`} onClick={(event) => {
+          if (event.target === event.currentTarget) openDatePicker();
+        }}>
           <input
-            ref={dateInputRef}
             type="date"
+            readOnly
+            value={form.date}
             lang={language === 'en' ? 'en-GB' : 'he'}
             dir={language === 'he' ? 'rtl' : 'ltr'}
             aria-label={t('fields.date')}
-            onClick={openDatePicker}
-            onKeyDown={(event) => {
-              if (!['Tab', 'Enter', ' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
-                event.preventDefault();
-              }
-            }}
-            onPaste={(event) => event.preventDefault()}
-            {...fieldProps('date')}
+            tabIndex={-1}
             className={`${styles.dateInput} ${errors.date ? styles.invalid : ''}`}
           />
           <button
             type="button"
             className={styles.datePickerButton}
             aria-label={t('fields.chooseDate')}
+            aria-expanded={isDatePickerOpen}
+            aria-controls="event-date-picker"
             onClick={openDatePicker}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7Zm12 17H5V9h14v10ZM5 7V6h14v1H5Z" />
             </svg>
           </button>
+          {isDatePickerOpen && (
+            <div id="event-date-picker" className={styles.datePicker} role="dialog" aria-label={t('fields.chooseDate')}>
+              <div className={styles.datePickerHeader}>
+                <button type="button" className={styles.monthButton} aria-label={t('calendar.previousMonth')} onClick={() => moveMonth(-1)}>
+                  <span aria-hidden="true">‹</span>
+                </button>
+                <strong>{monthLabel}</strong>
+                <button type="button" className={styles.monthButton} aria-label={t('calendar.nextMonth')} onClick={() => moveMonth(1)}>
+                  <span aria-hidden="true">›</span>
+                </button>
+              </div>
+              <div className={styles.weekDays} aria-hidden="true">
+                {weekDays.map((day) => <span key={day}>{day}</span>)}
+              </div>
+              <div className={styles.calendarGrid}>
+                {calendarDays.map((date, index) => date ? (
+                  <button
+                    key={date.toISOString()}
+                    type="button"
+                    className={styles.dayButton}
+                    aria-label={new Intl.DateTimeFormat(locale, { dateStyle: 'full' }).format(date)}
+                    aria-pressed={selectedDate?.getTime() === date.getTime()}
+                    onClick={() => selectDate(date)}
+                  >
+                    {date.getDate()}
+                  </button>
+                ) : <span key={`empty-${index}`} aria-hidden="true" />)}
+              </div>
+            </div>
+          )}
           <span className={styles.error}>{errors.date}</span>
         </div>
         <div className={styles.field}>

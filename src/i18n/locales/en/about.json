@@ -8,10 +8,11 @@
     "rock": "Rock",
     "israeli": "Israeli",
     "dance": "Dance",
-    "trance": "Trance",
-    "techno": "Techno",
     "afro": "Afro",
-    "hipHop": "Hip Hop",
+    "house": "House",
+    "electronic": "Electronic",
+    "techno": "Techno",
+    "trance": "Trance",
     "mainstream": "Mainstream"
   },
   "stats": {

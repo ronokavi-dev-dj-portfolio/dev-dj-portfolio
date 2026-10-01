@@ -4,9 +4,10 @@ export const genres = [
   { id: 'rock', labelKey: 'genres.rock' },
   { id: 'israeli', labelKey: 'genres.israeli' },
   { id: 'dance', labelKey: 'genres.dance' },
-  { id: 'trance', labelKey: 'genres.trance' },
-  { id: 'techno', labelKey: 'genres.techno' },
   { id: 'afro', labelKey: 'genres.afro' },
-  { id: 'hip-hop', labelKey: 'genres.hipHop' },
+  { id: 'house', labelKey: 'genres.house' },
+  { id: 'electronic', labelKey: 'genres.electronic' },
+  { id: 'techno', labelKey: 'genres.techno' },
+  { id: 'trance', labelKey: 'genres.trance' },
   { id: 'mainstream', labelKey: 'genres.mainstream' },
 ] as const;

@@ -9,6 +9,10 @@
     "type": "Event type",
     "message": "Tell me about your event"
   },
+  "calendar": {
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
   "actions": {
     "send": "Send"
   },

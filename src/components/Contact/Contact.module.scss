@@ -4,6 +4,7 @@
 
 h2 {
   font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  padding: 5px;
   margin-bottom: 1.5rem;
 }
 
@@ -40,58 +41,110 @@ input[type='date'] {
   text-align: start;
 
   &::-webkit-calendar-picker-indicator {
-    opacity: 0;
+    opacity: 0.75;
     cursor: pointer;
-  }
-
-  &::-webkit-datetime-edit {
-    direction: inherit;
-    text-align: start;
-  }
-
-  &::-webkit-calendar-picker-indicator {
     margin-inline-start: 0.35rem;
+    filter: invert(1);
   }
 }
 
 .dateField {
   position: relative;
+  cursor: pointer;
+}
+
+:global(html[dir='ltr']) .dateField {
+  direction: ltr;
 }
 
 .dateInput {
-  padding-inline-end: 3.25rem;
+  padding-inline-end: 1rem;
+  pointer-events: none;
 }
 
 .datePickerButton {
   position: absolute;
-  inset-block-start: 50%;
+  inset-block-start: 1.35rem;
   inset-inline-end: 0.9rem;
   display: grid;
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
   place-items: center;
+  z-index: 1;
   color: var(--muted);
   background: transparent;
   border: 0;
   transform: translateY(-50%);
   cursor: pointer;
 
-  svg {
-    width: 1.2rem;
-    height: 1.2rem;
-    fill: currentColor;
-  }
+  svg { width: 1.2rem; height: 1.2rem; fill: currentColor; }
+  &:hover, &:focus-visible { color: var(--text); }
+}
 
-  &:hover,
-  &:focus-visible {
-    color: var(--text);
+.datePicker {
+  position: absolute;
+  inset-block-start: calc(100% - 0.6rem);
+  inset-inline-end: 0;
+  z-index: 5;
+  width: min(19rem, 100%);
+  padding: 0.8rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+}
+
+.datePickerHeader, .weekDays, .calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.datePickerHeader {
+  grid-template-columns: 2rem 1fr 2rem;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+
+.monthButton, .dayButton {
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.monthButton {
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  &:hover, &:focus-visible { background: var(--line); }
+}
+
+.weekDays {
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.calendarGrid { margin-top: 0.35rem; }
+
+.dayButton {
+  min-height: 2rem;
+  background: transparent;
+  color: var(--text);
+  &:hover, &:focus-visible, &[aria-pressed='true'] {
+    background: var(--accent);
+    color: #fff;
   }
 }
 
 :global(html[dir='rtl']) .dateInput {
   padding-inline-start: 1rem;
-  padding-inline-end: 3.25rem;
+  padding-inline-end: 1rem;
 }
 
 :global(html[dir='ltr']) input[type='date'] {

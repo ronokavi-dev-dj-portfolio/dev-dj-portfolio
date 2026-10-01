@@ -9,6 +9,10 @@
     "type": "סוג האירוע",
     "message": "ספרו לי על האירוע שלכם"
   },
+  "calendar": {
+    "previousMonth": "החודש הקודם",
+    "nextMonth": "החודש הבא"
+  },
   "actions": {
     "send": "שליחה"
   },
