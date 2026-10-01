@@ -13,20 +13,21 @@ export function About() {
 
   return (
     <section id="about" className={styles.section}>
-      <p className={styles.eyebrow}>{t('eyebrow')}</p>
-      <h2>{t('heading')}</h2>
-
       <div className={styles.grid}>
-        <svg className={styles.ribbon} viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M100 100 C 60 60, 20 70, 10 40" stroke="#ff5b6e" strokeWidth="18" strokeLinecap="round" fill="none" />
-          <path d="M100 100 C 70 50, 40 20, 55 5" stroke="#ff9a3c" strokeWidth="18" strokeLinecap="round" fill="none" />
-          <path d="M100 100 C 90 45, 100 15, 130 10" stroke="#ffd23f" strokeWidth="18" strokeLinecap="round" fill="none" />
-          <path d="M100 100 C 120 55, 150 40, 165 55" stroke="#2fb6a8" strokeWidth="18" strokeLinecap="round" fill="none" />
-          <path d="M100 100 C 130 80, 165 85, 180 105" stroke="#2f7bff" strokeWidth="18" strokeLinecap="round" fill="none" />
-          <path d="M100 100 C 120 120, 150 150, 140 175" stroke="#6f5bd6" strokeWidth="18" strokeLinecap="round" fill="none" />
-        </svg>
+        <div className={styles.heading}>
+          <p className={styles.eyebrow}>{t('eyebrow')}</p>
+          <h2>{t('heading')}</h2>
+        </div>
 
-        <div className={styles.avatar} />
+        <div className={styles.portrait} aria-hidden="true">
+          <div className={styles.halo} />
+          <div className={styles.avatar}>
+            <svg className={styles.silhouette} viewBox="0 0 240 240" focusable="false">
+              <circle cx="120" cy="82" r="42" fill="currentColor" opacity="0.62" />
+              <path d="M34 240c6-53 37-88 86-88s80 35 86 88H34Z" fill="currentColor" opacity="0.48" />
+            </svg>
+          </div>
+        </div>
 
         <p className={styles.bio}>
           {t('bio')}
