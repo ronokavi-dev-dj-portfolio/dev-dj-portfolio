@@ -5,6 +5,7 @@ applyTo: ["src/**/*.ts", "src/**/*.tsx", "tests/**", "playwright.config.*"]
 ---
 # Testing Instructions
 
+- Use the .spec naming convention for test files in this repo (for example, `Component.spec.tsx` instead of `Component.test.tsx`).
 - Start with the smallest test or validation command covering the changed behavior.
 - Test user-visible behavior rather than implementation details.
 - Cover navigation, external links, responsive layout, keyboard interaction, and reduced motion when relevant.
