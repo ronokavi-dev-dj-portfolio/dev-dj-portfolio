@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import { videos } from '../../data/videos';
 import { Lightbox } from '../Lightbox/Lightbox';
 import styles from './Videos.module.scss';
 
 export function Videos() {
-  const { translate } = useLanguage();
+  const { t } = useTranslation('videos');
   const [openItemId, setOpenItemId] = useState<string | null>(null);
   const openItem = videos.find((videoItem) => videoItem.id === openItemId) ?? null;
 
   return (
     <section id="videos" className={styles.section}>
-      <p className={styles.eyebrow}>{translate({ en: 'See it live', he: 'לראות את זה חי' })}</p>
-      <h2>{translate({ en: 'Videos', he: 'וידאו' })}</h2>
+      <p className={styles.eyebrow}>{t('eyebrow')}</p>
+      <h2>{t('heading')}</h2>
 
       <div className={styles.grid}>
         {videos.map((videoItem) => (
@@ -24,7 +24,7 @@ export function Videos() {
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
               </span>
             </span>
-            <span className={styles.label}>{translate({ en: videoItem.titleEn, he: videoItem.titleHe })}</span>
+            <span className={styles.label}>{t(videoItem.titleKey)}</span>
           </button>
         ))}
       </div>
@@ -32,14 +32,14 @@ export function Videos() {
       {openItem && (
         <Lightbox
           isVideo
-          eyebrow={translate({ en: 'Live session', he: 'סשן חי' })}
-          title={translate({ en: openItem.titleEn, he: openItem.titleHe })}
+          eyebrow={t('liveSession')}
+          title={t(openItem.titleKey)}
           onClose={() => setOpenItemId(null)}
         >
           {openItem.youtubeId ? (
             <iframe
               src={`https://www.youtube.com/embed/${openItem.youtubeId}?autoplay=1`}
-              title={openItem.titleEn}
+              title={t(openItem.titleKey)}
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
@@ -48,7 +48,7 @@ export function Videos() {
               position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: 'var(--muted)', background: '#101013', fontSize: '0.9rem', padding: '1rem', textAlign: 'center',
             }}>
-              {translate({ en: 'Video coming soon', he: 'הוידאו בקרוב' })}
+              {t('comingSoon')}
             </div>
           )}
         </Lightbox>

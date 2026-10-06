@@ -1,0 +1,10 @@
+{
+  "eyebrow": "See it live",
+  "heading": "Videos",
+  "liveSession": "Live session",
+  "comingSoon": "Video coming soon",
+  "items": {
+    "mixSample": { "title": "Mix sample" },
+    "eventHighlight": { "title": "Event highlight reel" }
+  }
+}

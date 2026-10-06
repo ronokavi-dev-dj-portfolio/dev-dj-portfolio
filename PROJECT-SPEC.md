@@ -28,9 +28,9 @@ No server, no database, no paid tier of anything. The whole site is static files
 ## Internationalization — English + Hebrew
 The site supports **both English and Hebrew**, with a language toggle in the nav bar.
 - **No backend, no separate build per language** — stays a single static site, zero extra cost
-- **Content:** every piece of user-facing text (bio, genres, testimonials, nav labels, form
-  labels) is stored as a bilingual pair, e.g. `{ en: "...", he: "..." }`, in the data files —
-  not as two separate copies of the site
+- **Content:** every user-facing string is stored at a matching key in feature-based
+  react-i18next JSON namespaces under `/src/i18n/locales/en/` and `/src/i18n/locales/he/`.
+  Typed files under `/src/data/` keep only IDs, media metadata, URLs, and translation keys
 - **Direction:** Hebrew is RTL. The toggle switches `dir="rtl"`/`dir="ltr"` on `<html>` and
   swaps the active language. CSS uses logical properties (`margin-inline-start`, not
   `margin-left`) so layout mirrors correctly without duplicate RTL stylesheets
@@ -74,6 +74,10 @@ ron-dj-site/
 │   │   ├── testimonials.ts
 │   │   ├── gallery.ts
 │   │   └── videos.ts
+│   ├── i18n/
+│   │   ├── index.ts               # i18next initialization and language detection
+│   │   ├── LanguageEffects.tsx     # document language, direction, metadata, persistence
+│   │   └── locales/                # matching en/he feature namespace JSON files
 │   ├── App.tsx
 │   └── main.tsx
 ├── index.html

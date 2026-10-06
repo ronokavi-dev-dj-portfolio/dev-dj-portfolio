@@ -5,6 +5,7 @@ applyTo: ["src/**/*.ts", "src/**/*.tsx", "tests/**", "playwright.config.*"]
 ---
 # Testing Instructions
 
+- Use the .spec naming convention for test files in this repo (for example, `Component.spec.tsx` instead of `Component.test.tsx`).
 - Start with the smallest test or validation command covering the changed behavior.
 - Test user-visible behavior rather than implementation details.
 - Cover navigation, external links, responsive layout, keyboard interaction, and reduced motion when relevant.
@@ -12,4 +13,7 @@ applyTo: ["src/**/*.ts", "src/**/*.tsx", "tests/**", "playwright.config.*"]
 - Run the production build before considering a frontend change complete.
 - For visual changes, verify at mobile and desktop viewport sizes and check for overflow.
 - Verify both English LTR and Hebrew RTL states when changing bilingual UI.
+- Import the production i18next singleton in test setup and reset it to English between tests; do not maintain mock translations that can drift from locale resources.
+- Mount `LanguageEffects` in isolated fixtures only when asserting document `lang`, `dir`, metadata, or persistence.
+- Assert translated behavior through accessible names and visible output rather than implementation details or translation-hook mocks.
 - Never commit screenshots, test reports, credentials, or generated build output.

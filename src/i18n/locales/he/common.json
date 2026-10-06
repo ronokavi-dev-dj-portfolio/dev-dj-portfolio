@@ -1,0 +1,16 @@
+{
+  "brand": "Ron Okavi",
+  "brandUppercase": "רון עוקבי",
+  "languages": {
+    "english": "English",
+    "hebrew": "עברית"
+  },
+  "social": {
+    "instagram": "Instagram",
+    "whatsapp": "WhatsApp",
+    "whatsappContact": "צרו קשר עם רון ב-WhatsApp"
+  },
+  "footer": {
+    "copyright": "© 2026 רון עוקבי · Ron Okavi"
+  }
+}

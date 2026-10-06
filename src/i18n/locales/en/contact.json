@@ -1,0 +1,32 @@
+{
+  "eyebrow": "Have an event coming up?",
+  "heading": "Get in touch",
+  "fields": {
+    "name": "Name",
+    "reply": "Your email or phone",
+    "date": "Event date",
+    "chooseDate": "Open calendar",
+    "type": "Event type",
+    "message": "Tell me about your event"
+  },
+  "calendar": {
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "actions": {
+    "send": "Send"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidReply": "Enter a valid email or phone number"
+  },
+  "status": {
+    "sent": "Thanks! Your message has been sent.",
+    "ready": "Thanks! Your message is ready to send.",
+    "error": "Something went wrong — please email me directly at ronokavi@gmail.com"
+  },
+  "email": {
+    "subject": "New booking inquiry from {{name}}",
+    "body": "Name: {{name}}\nContact: {{reply}}\nEvent date: {{date}}\nEvent type: {{type}}\n\n{{message}}"
+  }
+}

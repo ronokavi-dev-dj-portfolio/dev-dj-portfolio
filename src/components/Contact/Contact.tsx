@@ -1,5 +1,6 @@
-import { FormEvent, useEffect, useState } from 'react';
-import { useLanguage } from '../../context/LanguageContext';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSiteLanguage } from '../../i18n/useSiteLanguage';
 import styles from './Contact.module.scss';
 
 const RON_EMAIL = 'ronokavi@gmail.com';
@@ -17,33 +18,63 @@ type FormState = {
   message: string;
 };
 
+const DATE_VALUE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+function dateValueToDate(value: string): Date | null {
+  const match = DATE_VALUE_RE.exec(value);
+  if (!match) return null;
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function dateToValue(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const EMPTY_FORM: FormState = { name: '', reply: '', date: '', type: '', message: '' };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[\d\s+\-()]{7,}$/;
 
 export function Contact() {
-  const { language, translate } = useLanguage();
+  const { t } = useTranslation('contact');
+  const { language } = useSiteLanguage();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [visibleMonth, setVisibleMonth] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+  const dateFieldRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setErrors({});
     setStatus('');
   }, [language]);
 
+  useEffect(() => {
+    const closeDatePicker = (event: PointerEvent) => {
+      if (!dateFieldRef.current?.contains(event.target as Node)) setIsDatePickerOpen(false);
+    };
+    document.addEventListener('pointerdown', closeDatePicker);
+    return () => document.removeEventListener('pointerdown', closeDatePicker);
+  }, []);
+
   const update = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
   function validate(): boolean {
     const next: Partial<Record<keyof FormState, string>> = {};
-    const required = translate({ en: 'This field is required', he: 'שדה חובה' });
+    const required = t('validation.required');
 
     if (!form.name.trim()) next.name = required;
     if (!form.reply.trim()) next.reply = required;
     else if (!EMAIL_RE.test(form.reply) && !PHONE_RE.test(form.reply)) {
-      next.reply = translate({ en: 'Enter a valid email or phone number', he: 'הזינו אימייל או טלפון תקין' });
+      next.reply = t('validation.invalidReply');
     }
     if (!form.date.trim()) next.date = required;
     if (!form.type.trim()) next.type = required;
@@ -65,23 +96,18 @@ export function Contact() {
           body: JSON.stringify(form),
         });
         if (!res.ok) throw new Error('Formspree submission failed');
-        setStatus(translate({ en: 'Thanks! Your message has been sent.', he: 'תודה! ההודעה נשלחה.' }));
+        setStatus(t('status.sent'));
         setForm(EMPTY_FORM);
       } else {
         // No Formspree endpoint configured yet — fall back to opening the
         // visitor's email client, addressed to Ron, pre-filled.
-        const subject = encodeURIComponent(`New booking inquiry from ${form.name}`);
-        const body = encodeURIComponent(
-          `Name: ${form.name}\nContact: ${form.reply}\nEvent date: ${form.date}\nEvent type: ${form.type}\n\n${form.message}`
-        );
-        setStatus(translate({ en: 'Thanks! Your message is ready to send.', he: 'תודה! ההודעה מוכנה לשליחה.' }));
+        const subject = encodeURIComponent(t('email.subject', { name: form.name }));
+        const body = encodeURIComponent(t('email.body', form));
+        setStatus(t('status.ready'));
         window.location.href = `mailto:${RON_EMAIL}?subject=${subject}&body=${body}`;
       }
     } catch {
-      setStatus(translate({
-        en: "Something went wrong — please email me directly at ronokavi@gmail.com",
-        he: 'משהו השתבש — אנא שלחו לי מייל ישירות ל-ronokavi@gmail.com',
-      }));
+      setStatus(t('status.error'));
     } finally {
       setSubmitting(false);
     }
@@ -93,40 +119,116 @@ export function Contact() {
     className: errors[key] ? styles.invalid : undefined,
   });
 
+  const locale = language === 'en' ? 'en-GB' : 'he-IL';
+  const selectedDate = dateValueToDate(form.date);
+  const monthLabel = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(visibleMonth);
+  const weekDays = Array.from({ length: 7 }, (_, index) =>
+    new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2024, 0, 7 + index)),
+  );
+  const firstDay = visibleMonth.getDay();
+  const daysInMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
+  const calendarDays = Array.from({ length: firstDay + daysInMonth }, (_, index) =>
+    index < firstDay ? null : new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index - firstDay + 1),
+  );
+
+  const openDatePicker = () => {
+    setVisibleMonth(selectedDate
+      ? new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
+      : new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+    setIsDatePickerOpen(true);
+  };
+
+  const moveMonth = (offset: number) => {
+    setVisibleMonth((month) => new Date(month.getFullYear(), month.getMonth() + offset, 1));
+  };
+
+  const selectDate = (date: Date) => {
+    setForm((current) => ({ ...current, date: dateToValue(date) }));
+    setErrors((current) => ({ ...current, date: undefined }));
+    setIsDatePickerOpen(false);
+  };
+
   return (
     <section id="contact" className={styles.section}>
-      <p className={styles.eyebrow}>{translate({ en: 'Have an event coming up?', he: 'יש לך אירוע בקרוב?' })}</p>
-      <h2>{translate({ en: 'Get in touch', he: 'בואו נדבר' })}</h2>
+      <p className={styles.eyebrow}>{t('eyebrow')}</p>
+      <h2>{t('heading')}</h2>
 
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.field}>
-          <input type="text" placeholder={translate({ en: 'Name', he: 'שם' })} {...fieldProps('name')} />
+          <input type="text" placeholder={t('fields.name')} {...fieldProps('name')} />
           <span className={styles.error}>{errors.name}</span>
         </div>
         <div className={styles.field}>
-          <input type="text" placeholder={translate({ en: 'Your email or phone', he: 'האימייל או הטלפון שלך' })} {...fieldProps('reply')} />
+          <input type="text" placeholder={t('fields.reply')} {...fieldProps('reply')} />
           <span className={styles.error}>{errors.reply}</span>
         </div>
-        <div className={styles.field}>
+        <div ref={dateFieldRef} className={`${styles.field} ${styles.dateField}`} onClick={(event) => {
+          if (event.target === event.currentTarget) openDatePicker();
+        }}>
           <input
             type="date"
+            readOnly
+            value={form.date}
             lang={language === 'en' ? 'en-GB' : 'he'}
             dir={language === 'he' ? 'rtl' : 'ltr'}
-            aria-label={translate({ en: 'Event date', he: 'תאריך האירוע' })}
-            {...fieldProps('date')}
+            aria-label={t('fields.date')}
+            tabIndex={-1}
+            className={`${styles.dateInput} ${errors.date ? styles.invalid : ''}`}
           />
+          <button
+            type="button"
+            className={styles.datePickerButton}
+            aria-label={t('fields.chooseDate')}
+            aria-expanded={isDatePickerOpen}
+            aria-controls="event-date-picker"
+            onClick={openDatePicker}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7Zm12 17H5V9h14v10ZM5 7V6h14v1H5Z" />
+            </svg>
+          </button>
+          {isDatePickerOpen && (
+            <div id="event-date-picker" className={styles.datePicker} role="dialog" aria-label={t('fields.chooseDate')}>
+              <div className={styles.datePickerHeader}>
+                <button type="button" className={styles.monthButton} aria-label={t('calendar.previousMonth')} onClick={() => moveMonth(-1)}>
+                  <span aria-hidden="true">‹</span>
+                </button>
+                <strong>{monthLabel}</strong>
+                <button type="button" className={styles.monthButton} aria-label={t('calendar.nextMonth')} onClick={() => moveMonth(1)}>
+                  <span aria-hidden="true">›</span>
+                </button>
+              </div>
+              <div className={styles.weekDays} aria-hidden="true">
+                {weekDays.map((day) => <span key={day}>{day}</span>)}
+              </div>
+              <div className={styles.calendarGrid}>
+                {calendarDays.map((date, index) => date ? (
+                  <button
+                    key={date.toISOString()}
+                    type="button"
+                    className={styles.dayButton}
+                    aria-label={new Intl.DateTimeFormat(locale, { dateStyle: 'full' }).format(date)}
+                    aria-pressed={selectedDate?.getTime() === date.getTime()}
+                    onClick={() => selectDate(date)}
+                  >
+                    {date.getDate()}
+                  </button>
+                ) : <span key={`empty-${index}`} aria-hidden="true" />)}
+              </div>
+            </div>
+          )}
           <span className={styles.error}>{errors.date}</span>
         </div>
         <div className={styles.field}>
-          <input type="text" placeholder={translate({ en: 'Event type', he: 'סוג האירוע' })} {...fieldProps('type')} />
+          <input type="text" placeholder={t('fields.type')} {...fieldProps('type')} />
           <span className={styles.error}>{errors.type}</span>
         </div>
         <div className={styles.field}>
-          <textarea rows={4} placeholder={translate({ en: 'Tell me about your event', he: 'ספרו לי על האירוע שלכם' })} {...fieldProps('message')} />
+          <textarea rows={4} placeholder={t('fields.message')} {...fieldProps('message')} />
           <span className={styles.error}>{errors.message}</span>
         </div>
         <button type="submit" className={styles.submitBtn} disabled={submitting}>
-          {translate({ en: 'Send', he: 'שליחה' })}
+          {t('actions.send')}
         </button>
         <p className={styles.status}>{status}</p>
       </form>

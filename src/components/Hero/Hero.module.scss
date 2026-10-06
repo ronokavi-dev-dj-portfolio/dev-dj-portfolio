@@ -79,3 +79,20 @@
 
   &:hover { transform: translateY(-2px); background-position: right center; }
 }
+
+:global(html[dir='rtl']) .eyebrow {
+  letter-spacing: 0;
+}
+
+:global(html[dir='rtl']) .title {
+  letter-spacing: 0;
+  line-height: 1.12;
+  margin-bottom: 0.85rem;
+}
+
+:global(html[dir='rtl']) .sub {
+  max-width: 680px;
+  line-height: 1.8;
+  word-spacing: 0.06em;
+  text-wrap: balance;
+}
